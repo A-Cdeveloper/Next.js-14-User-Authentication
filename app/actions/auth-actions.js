@@ -69,3 +69,5 @@ export const loginUserAction = async (prevFormData, formData) => {
   await createAuthSession(existingUser.id);
   redirect("/training");
 };
+
+export const logoutUserAction = async (prevFormData, formData) => {};
