@@ -2,7 +2,7 @@
 
 import { createAuthSession } from "@/lib/auth";
 import { hashUserPassword, verifyPassword } from "@/lib/hash";
-import { createUser } from "@/lib/user";
+import { createUser, getUserByEmail } from "@/lib/user";
 import { redirect } from "next/navigation";
 
 export const createUserAction = async (prevFormData, formData) => {
@@ -41,4 +41,31 @@ export const createUserAction = async (prevFormData, formData) => {
     }
     throw error;
   }
+};
+
+export const loginUserAction = async (prevFormData, formData) => {
+  const data = Object.fromEntries(formData.entries());
+  const { email, password } = data;
+
+  const existingUser = getUserByEmail(email);
+
+  if (!existingUser) {
+    return {
+      errors: {
+        email: "This user not exist",
+      },
+    };
+  }
+
+  const isVerify = verifyPassword(existingUser.password, password);
+
+  if (!isVerify) {
+    return {
+      errors: {
+        email: "This user not exist",
+      },
+    };
+  }
+  await createAuthSession(existingUser.id);
+  redirect("/training");
 };

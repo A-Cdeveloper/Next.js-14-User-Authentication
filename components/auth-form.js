@@ -1,10 +1,14 @@
 "use client";
 import { useFormState } from "react-dom";
-import { createUserAction } from "@/app/actions/auth-actions";
+import { useSearchParams } from "next/navigation";
+import { createUserAction, loginUserAction } from "@/app/actions/auth-actions";
 import Link from "next/link";
 
 export default function AuthForm() {
-  const [state, action] = useFormState(createUserAction, {});
+  const searchParams = useSearchParams();
+  const isLoginArea = searchParams.get("mode") === "login";
+  const userAction = isLoginArea ? loginUserAction : createUserAction;
+  const [state, action] = useFormState(userAction, {});
 
   //console.log(state.errors.email);
   return (
@@ -27,10 +31,16 @@ export default function AuthForm() {
         )}
       </p>
       <p>
-        <button type="submit">Create Account</button>
+        <button type="submit">
+          {isLoginArea ? "Log In" : "Create Account"}
+        </button>
       </p>
       <p>
-        <Link href="/">Login with existing account.</Link>
+        <Link href={`${isLoginArea ? "/" : "/?mode=login"}`}>
+          {isLoginArea
+            ? "Go and create new account."
+            : "Login with existing account."}
+        </Link>
       </p>
     </form>
   );
