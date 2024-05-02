@@ -1,6 +1,6 @@
 "use server";
 
-import { createAuthSession } from "@/lib/auth";
+import { createAuthSession, deleteAuthSession } from "@/lib/auth";
 import { hashUserPassword, verifyPassword } from "@/lib/hash";
 import { createUser, getUserByEmail } from "@/lib/user";
 import { redirect } from "next/navigation";
@@ -70,4 +70,7 @@ export const loginUserAction = async (prevFormData, formData) => {
   redirect("/training");
 };
 
-export const logoutUserAction = async (prevFormData, formData) => {};
+export const logoutUserAction = async () => {
+  await deleteAuthSession();
+  redirect("/");
+};

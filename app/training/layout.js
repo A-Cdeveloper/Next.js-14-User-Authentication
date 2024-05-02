@@ -1,5 +1,5 @@
-import { headers } from "next/headers";
 import "../globals.css";
+import { logoutUserAction } from "../actions/auth-actions";
 
 export const metadata = {
   title: "Next Auth Training",
@@ -11,7 +11,9 @@ export default function TrainingLayout({ children }) {
     <>
       <header id="auth-header">
         <p>Welcome back!</p>
-        <button>Log out</button>
+        <form action={logoutUserAction}>
+          <button>Log out</button>
+        </form>
       </header>
       {children}
     </>
